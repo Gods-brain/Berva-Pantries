@@ -1,0 +1,488 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="{% static 'image/LA.png' %}" type="image/png">
+  <title>Berva-pantries</title>
+  <style>
+    :root{
+      --bg:#fff8f0;
+      --card:#ffffff;
+      --accent:#f97316;   /* Orange */
+      --accent-2:#22c55e; /* Green */
+      --muted:#7b8794;
+      --glass: rgba(255,255,255,0.6);
+      --radius:18px;
+      --shadow: 0 8px 30px rgba(18,23,35,0.08);
+      --round:14px;
+      --maxw:1200px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,var(--bg) 0%, #fef6ee 100%);
+      color:#0f1724; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+    .wrap{max-width:var(--maxw); margin:34px auto; padding:24px}
+
+    /* Header */
+    header{display:flex; align-items:center; justify-content:space-between; gap:16px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo img{width:50px;height:50px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:inline-grid;place-items:center;color:white;font-weight:700;font-size:20px;box-shadow:0 6px 20px rgba(249,115,22,0.25)}
+    .brand h1{margin:0;font-size:18px;letter-spacing:-0.2px}
+    nav{display:flex;gap:18px;align-items:center}
+    nav a{color:var(--muted);text-decoration:none;font-weight:600}
+
+    /* Search */
+    .search{flex:1;margin:0 24px;display:flex;align-items:center;gap:12px}
+    .search input{flex:1;padding:14px 16px;border-radius:12px;border:1px solid rgba(15,23,36,0.06);background:white;outline:none;box-shadow:var(--shadow);}
+    .icons{display:flex;align-items:center;gap:12px}
+    .icon-btn{background:var(--card);border-radius:12px;padding:10px;box-shadow:var(--shadow);display:inline-grid;place-items:center;width:44px;height:44px}
+
+
+    /* Product grid */
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:28px}
+    .prod{background:var(--card);padding:14px;border-radius:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
+    .prod .thumb{height:160px;border-radius:12px;background:linear-gradient(180deg,#fff3ed,#fef6ee);display:grid;place-items:center;font-weight:700;color:var(--muted)}
+    .prod .thumb img{width: 100%;height:160px;object-fit: contain;border-radius: 12px;}
+    .prod h4{margin:0}
+    .meta{display:flex;justify-content:space-between;align-items:center}
+    .add{padding:8px 10px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:white;font-weight:700}
+
+    /* Pagination */
+    .pagination {
+        margin: 30px 0;
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+    }
+
+    .circle {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 700;
+        font-size: 20px;
+        color: #333;
+        text-decoration: none;
+        transition: 0.2s ease;
+    }
+
+    .circle:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+    }
+
+    .number {
+        background: var(--accent); /* your theme color */
+        color: white;
+    }
+
+    .disabled {
+        opacity: 0.4;
+        pointer-events: none;
+    }
+
+
+    /* ABOUT SECTION */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-top: 70px;
+      align-items: center;
+      padding: 40px;
+      background: linear-gradient(135deg, #fffdf9, rgba(249, 115, 22, 0.05));
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .about-left img {
+      width: 100%;
+      border-radius: 20px;
+      height: 330px;
+      object-fit: cover;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .about-right h2 {
+      font-size: 28px;
+      margin: 0 0 12px;
+      color: #0f1724;
+    }
+
+    .about-right p {
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .about-features {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .feat {
+      display: flex;
+      gap: 14px;
+      align-items: start;
+      background: var(--card);
+      padding: 14px;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .feat .icon {
+      font-size: 26px;
+    }
+
+    .feat h4 {
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .feat p {
+      margin: 4px 0 0;
+      color: var(--muted);
+    }
+
+    .about-btn {
+      margin-top: 24px;
+      padding: 12px 20px;
+      font-size: 15px;
+      border-radius: 14px;
+    }
+
+    /* About responsiveness */
+    @media (max-width: 900px) {
+      .about {
+        grid-template-columns: 1fr;
+        padding: 24px;
+      }
+      .about-left img {
+        height: 240px;
+      }
+    }
+
+    /* Modern Footer */
+    footer {
+      margin-top: 60px;
+      padding: 40px 24px 24px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #ffffff, rgba(255, 255, 255, 0.95));
+      box-shadow: var(--shadow);
+      font-size: 14px;
+      color: #0f1724;
+    }
+    .footer-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      justify-content: space-between;
+      max-width: var(--maxw);
+      margin: 0 auto;
+    }
+    .footer-left {
+      flex: 1 1 250px;
+    }
+    .logo-footer img{
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      font-weight: 700;
+      font-size: 22px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 14px;
+      box-shadow: 0 6px 20px rgba(249,115,22,0.25);
+    }
+    .footer-left p {
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    .socials a {
+      display: inline-block;
+      margin-right: 12px;
+      font-size: 18px;
+      transition: transform 0.3s ease;
+    }
+    .socials a:hover { transform: translateY(-4px); }
+    .footer-links {
+      display: flex;
+      flex: 2 1 500px;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .footer-links h4 { margin-bottom: 8px; font-weight: 700; }
+    .footer-links ul { list-style: none; padding: 0; margin: 0; }
+    .footer-links a { text-decoration: none; color: var(--muted); display: block; margin-bottom: 6px; transition: color 0.3s ease; }
+    .footer-links a:hover { color: var(--accent-2); }
+    .footer-bottom { text-align: center; margin-top: 24px; color: var(--muted); font-size: 13px; }
+
+    /* responsiveness */
+    @media (max-width:980px){.grid{grid-template-columns:repeat(2,1fr)}.hero{grid-template-columns:1fr}}
+    @media (max-width:520px){.wrap{padding:12px}.grid{grid-template-columns:1fr}.search{display:none}.brand h1{font-size:16px}}
+
+    /* ---------------------------
+       MOBILE MENU ADDITIONS (no layout removed)
+       --------------------------- */
+    .mobile-menu-btn {
+      display: none;
+      font-size: 26px;
+      background: var(--card);
+      padding: 10px 14px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      margin-top: 12px;
+    }
+
+    .mobile-menu {
+      display: none;
+      background: white;
+      padding: 16px;
+      border-radius: 14px;
+      margin-top: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .mobile-menu input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(15,23,36,0.08);
+      outline: none;
+      box-shadow: rgba(0,0,0,0.06) 0px 4px 15px;
+    }
+
+    .mobile-icons {
+      display: flex;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mobile-icons .icon-btn {
+      width: 42px;
+      height: 42px;
+    }
+
+    /* show mobile menu button and hide desktop icons when small */
+    @media (max-width: 520px) {
+      .mobile-menu-btn { display: block; }
+      .mobile-menu { display: none; } /* toggled via JS */
+      .icons { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo"><img src="{% static 'image/LA.png' %}" alt="LA" srcset=""></div>
+        <div>
+          <h1>Berva-pantries</h1>
+          <div style="font-size:12px;color:var(--muted)">Fresh groceries, delivered fast</div>
+        </div>
+      </div>
+      <div class="search">
+        <form method="get" action="{% url 'search' %}">
+            <input type="search" name="q" placeholder="Search..." value="{{ request.GET.q }}">
+            <button type="submit" style="display:none"></button>
+        </form>
+      </div>
+      <div class="icons">
+        <div class="icon-btn" title="Home"><a href="{% url 'home' %}" style="color: white; text-decoration: none; font-weight: bold;">💒</a></div>
+        <div class="icon-btn" title="About"><a href="/#about" style="color: black; text-decoration: none; font-weight: bold;">i</a></div>
+        <div class="icon-btn" title="Shop"><a href="{% url 'search' %}" style="color: white; text-decoration: none; font-weight: bold;">🛒</a></div>
+      </div>
+    </header>
+
+    <!-- MOBILE MENU BUTTON -->
+    <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">☰</div>
+
+    <!-- MOBILE MENU (hidden by default; toggled via JS) -->
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+      <input type="search" placeholder="Search for fruits, veggies, snacks..." />
+      <div class="mobile-icons">
+        <div class="icon-btn" title="Home"><a href="{% url 'home' %}" style="color: white; text-decoration: none; font-weight: bold;">💒</a></div>
+        <div class="icon-btn" title="About"><a href="/#about" style="color: black; text-decoration: none; font-weight: bold;">i</a></div>
+        <div class="icon-btn" title="Shop"><a href="{% url 'search' %}" style="color: white; text-decoration: none; font-weight: bold;">🛒</a></div>
+      </div>
+    </div>
+
+    <main>
+        {% if search_query %}
+        <h3>Found ({{product_num}}) results for "{{search_query}}"</h3>
+        {% endif %}
+        <section class="grid" aria-label="Products">
+        {% for item in result %}
+        <article class="prod">
+          <div class="thumb"><img src="{{ item.image.url }}"></div>
+          <h4>{{item.name}} — {{item.stock}}stock</h4>
+          <div class="meta">
+            <div>₦{{item.price}}</div>
+            <button class="add"><a href="{% url 'detail' item.id %}" style="color: white; text-decoration: none; font-weight: bold;">Details</a></button>
+          </div>
+        </article>
+        {% empty %}
+            <h3>No Result Found</h3>
+        {% endfor %}
+      </section>
+
+      {% if is_paginated %}
+        <div class="pagination">
+
+            <!-- Previous page -->
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="circle">&lsaquo;</a>
+            {% else %}
+                <span class="circle disabled">&lsaquo;</span>
+            {% endif %}
+
+            <!-- Current page number -->
+            <span class="circle number">{{ page_obj.number }}</span>
+
+            <!-- Next page -->
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="circle">&rsaquo;</a>
+            {% else %}
+                <span class="circle disabled">&rsaquo;</span>
+            {% endif %}
+
+        </div>
+      {% endif %}
+
+
+    </main>
+
+    <footer>
+      <div class="footer-container">
+        <div class="footer-left">
+          <div class="logo-footer"><img src="{% static 'image/LA.png' %}" alt="LA" srcset=""><h3>Berva-pantries</h3></div>
+          <p>Fresh groceries delivered fast and with care. Explore our weekly picks and exclusive bundles.</p>
+          <div class="socials">
+            <a href="#" title="Facebook">🌐</a>
+            <a href="#" title="Twitter">🐦</a>
+            <a href="#" title="Instagram">📸</a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <div>
+            <h4>Company</h4>
+            <ul>
+              <li><a href="#">About us</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Support</h4>
+            <ul>
+              <li><a href="#">Help Center</a></li>
+              <li><a href="#">Delivery Info</a></li>
+              <li><a href="#">Returns</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Legal</h4>
+            <ul>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Terms of Service</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        © <strong>Grocery</strong> — Built with care • Delivery across Lagos
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Elements that will animate on scroll + hover
+    const animatedItems = document.querySelectorAll(
+      ".prod, .card, .promo, .hero-left, .thumb, .add, .btn, .icon-btn, footer"
+    );
+
+    // HOVER ANIMATION
+    animatedItems.forEach(el => {
+      el.style.transition = "transform 0.35s ease, box-shadow 0.35s ease, opacity 0.35s ease";
+
+      el.addEventListener("mouseenter", () => {
+        el.style.transform = "translateY(-6px) scale(1.03)";
+        el.style.boxShadow = "0 10px 32px rgba(0,0,0,0.12)";
+      });
+
+      el.addEventListener("mouseleave", () => {
+        el.style.transform = "translateY(0) scale(1)";
+        el.style.boxShadow = "";
+      });
+    });
+
+    // SCROLL ANIMATION
+    function animateOnScroll() {
+      animatedItems.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        const isVisible = rect.top < window.innerHeight - 80;
+
+        if (isVisible) {
+          el.style.opacity = "1";
+          el.style.transform = "translateY(0) scale(1)";
+        } else {
+          el.style.opacity = "0";
+          el.style.transform = "translateY(40px) scale(0.96)";
+        }
+      });
+    }
+
+    // Set initial hidden state
+    animatedItems.forEach(el => {
+      el.style.opacity = "0";
+      el.style.transform = "translateY(40px) scale(0.96)";
+    });
+
+    // Run animation on scroll and page load
+    window.addEventListener("scroll", animateOnScroll);
+    animateOnScroll();
+
+    /* MOBILE MENU TOGGLE */
+    function toggleMobileMenu(){
+      const menu = document.getElementById('mobileMenu');
+      const btn = document.getElementById('mobileMenuBtn');
+      if(!menu || !btn) return;
+      if(menu.style.display === 'block'){
+        menu.style.display = 'none';
+        menu.setAttribute('aria-hidden','true');
+        btn.setAttribute('aria-expanded','false');
+      } else {
+        menu.style.display = 'block';
+        menu.setAttribute('aria-hidden','false');
+        btn.setAttribute('aria-expanded','true');
+      }
+    }
+
+    // Close mobile menu on outside click (optional but helpful)
+    document.addEventListener('click', function(e){
+      const menu = document.getElementById('mobileMenu');
+      const btn = document.getElementById('mobileMenuBtn');
+      if(!menu || !btn) return;
+      const target = e.target;
+      if(menu.style.display === 'block' && !menu.contains(target) && !btn.contains(target) && !target.closest('header')){
+        menu.style.display = 'none';
+        menu.setAttribute('aria-hidden','true');
+        btn.setAttribute('aria-expanded','false');
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" href="./LA.png" type="image/png">
+<title>{{ product.name }} – Details</title>
+
+<style>
+
+:root{
+    --card:#ffffff;
+    --accent:#ff7a00;
+    --accent-2:#ff5500;
+    --green:#03b35c;
+    --shadow:0 20px 60px rgba(0,0,0,0.08);
+    --muted:#8b8b8b;
+}
+
+body{
+    margin:0;
+    padding:0;
+    font-family:Arial, sans-serif;
+    background:#fffefb;
+    color:#333;
+}
+
+/* PAGE WRAPPER */
+.container{
+    width:92%;
+    max-width:1050px;
+    margin:auto;
+    padding:20px 0;
+}
+
+/* HEADER */
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.header a{
+    color:var(--accent);
+    font-weight:bold;
+    text-decoration:none;
+    font-size:16px;
+}
+
+/* PRODUCT WRAPPER */
+.detail-box{
+    background:var(--card);
+    padding:25px;
+    border-radius:18px;
+    box-shadow:var(--shadow);
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:30px;
+}
+
+/* PRODUCT IMAGE */
+.image-box{
+    background:linear-gradient(180deg,#fff3ed,#fef6ee);
+    border-radius:18px;
+    padding:20px;
+    display:grid;
+    place-items:center;
+}
+
+.image-box img{
+    width:100%;
+    height:350px;
+    object-fit:contain;
+}
+
+/* PRODUCT INFO */
+.info h1{
+    margin:0;
+    font-size:28px;
+}
+
+.price-tag{
+    margin:12px 0;
+    font-size:28px;
+    font-weight:900;
+    color:var(--accent-2);
+}
+
+.stock{
+    color:var(--green);
+    margin-bottom:18px;
+    font-weight:bold;
+}
+
+.desc{
+    line-height:1.6;
+    color:#444;
+    margin-bottom:20px;
+}
+
+/* FEATURES SECTION */
+.features{
+    background:#fff7ef;
+    padding:14px 16px;
+    border-radius:12px;
+    margin-bottom:22px;
+}
+
+.features div{
+    padding:6px 0;
+    font-size:15px;
+    display:flex;
+    gap:8px;
+    align-items:center;
+}
+
+/* BUTTON */
+.buy-btn{
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    padding:14px 20px;
+    border:none;
+    border-radius:14px;
+    color:white;
+    font-weight:bold;
+    font-size:16px;
+    cursor:pointer;
+    width:100%;
+    transition:0.25s;
+}
+
+.buy-btn:hover{
+    transform:scale(1.03);
+    opacity:0.9;
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+    .detail-box{
+        grid-template-columns:1fr;
+    }
+    .image-box img{
+        height:270px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <a href="{% url 'home' %}">← Back</a>
+        <strong style="color:var(--accent-2);">Product Detail</strong>
+    </div>
+
+    <!-- PRODUCT CONTENT -->
+    <div class="detail-box">
+
+        <!-- IMAGE -->
+        <div class="image-box">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        </div>
+
+        <!-- INFO -->
+        <div class="info">
+
+            <h1>{{ product.name }}</h1>
+
+            <div class="price-tag">₦{{ product.price }}</div>
+
+            <div class="stock">
+                {{ product.stock }} in stock
+            </div>
+
+            <p class="desc">
+                {{ product.description }}
+            </p>
+
+            <!-- FEATURES WITH ICONS -->
+            <div class="features">
+                <div>🍀 {{product.get_quality_display}}</div>
+                <div>🚚 Fast Delivery Available</div>
+                <div>🛒 {{product.get_type_display}}</div>
+                <div>⭐ Premium Quality Guaranteed</div>
+            </div>
+
+            <!-- BUTTON -->
+            <button class="buy-btn">
+                <a href="https://wa.me/2349134308908?text=I%20want%20to%20order%0AProduct:%20{{product.name|urlencode}}%0ADescription:%20{{product.description|truncatechars:100|urlencode}}%0APrice:%20₦{{product.price|urlencode}}." style="color: white; text-decoration: none;">
+                 Order via Whatsapp
+                </a>
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
