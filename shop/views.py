@@ -11,7 +11,7 @@ class Home(ListView):
     model = Products
     template_name = 'shop/home.html'
     context_object_name = 'product'
-    paginate_by = 4
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -46,7 +46,7 @@ class BundleDetail(DetailView):
 class SearchResult(ListView):
     template_name = "shop/search.html"
     context_object_name = "result"
-    paginate_by = 4
+    paginate_by = 10
 
     def get_queryset(self):
         query = self.request.GET.get('q', '')
@@ -66,4 +66,4 @@ class BundleResult(ListView):
     model = Bundles
     template_name = "shop/search.html"
     context_object_name = "result"
-    paginate_by = 4
+    paginate_by = 10
